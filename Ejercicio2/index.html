@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Boleto</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white flex items-center justify-center h-screen">
+
+  <div class="text-center p-6 rounded-2xl shadow-xl bg-green-100 w-96">
+    <h1 class="text-2xl font-bold mb-4 text-green-800">Precio del Boleto</h1>
+
+    <input 
+      type="number" 
+      id="precioKilometro" 
+      placeholder="Precio por kilómetro" 
+      class="w-full mb-3 p-2 rounded-lg border-2 border-green-500 focus:outline-none focus:ring-2 focus:ring-green-600" 
+      min="0.01" step="0.01"
+    />
+
+    <input 
+      type="number" 
+      id="distancia" 
+      placeholder="Distancia en kilómetros" 
+      class="w-full mb-3 p-2 rounded-lg border-2 border-green-500 focus:outline-none focus:ring-2 focus:ring-green-600" 
+      min="0.1" step="0.1"
+    />
+
+    <button 
+      onclick="calcularBoleto()" 
+      class="mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-300"
+    >
+      Calcular
+    </button>
+  </div>
+
+  <script>
+    function calcularBoleto() {
+      const precio = document.getElementById("precioKilometro").value;
+      const distancia = document.getElementById("distancia").value;
+
+      fetch('Ejercicio2.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `precioKilometro=${precio}&distancia=${distancia}`
+      })
+      .then(response => response.json())
+      .then(data => {
+        Swal.fire({
+          icon: data.icon,
+          title: data.message,
+          showConfirmButton: false,
+          timer: 2500
+        });
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo procesar el cálculo"
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>
