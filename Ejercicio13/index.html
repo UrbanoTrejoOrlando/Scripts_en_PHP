@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Precio del Boleto de Viaje</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex items-center justify-center min-h-screen p-4">
+
+  <div class="bg-blue-100 p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-blue-800 text-center">Calcular Precio del Boleto</h1>
+
+    <form id="boletoForm" class="space-y-4">
+      <div>
+        <label class="block text-blue-800 font-medium mb-1">Kilómetros a recorrer:</label>
+        <input type="number" name="kilometros" required class="w-full p-2 border-2 border-blue-500 rounded-lg">
+      </div>
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+        Calcular Precio
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("boletoForm");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch("Ejercicio13.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.icon === "success") {
+          Swal.fire({
+            icon: "success",
+            title: "Precio del Boleto",
+            html: `<p>El precio total es: $${data.total}</p>`,
+            confirmButtonText: "OK"
+          });
+        }
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo calcular el precio del boleto."
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
