@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Costo de Llamada</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex items-center justify-center h-screen p-4">
+
+  <div class="bg-green-100 p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-green-800 text-center">Costo de Llamada</h1>
+    <form id="formulario" class="space-y-4">
+      <div>
+        <label class="block text-green-800 font-medium mb-1">Tiempo de la llamada (minutos):</label>
+        <input 
+          type="number" 
+          name="tiempo" 
+          class="w-full p-2 border-2 border-green-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" 
+          step="any"
+          required
+        />
+      </div>
+      <div>
+        <label class="block text-green-800 font-medium mb-1">Costo por minuto (pesos):</label>
+        <input 
+          type="number" 
+          name="costo" 
+          class="w-full p-2 border-2 border-green-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" 
+          step="any"
+          required
+        />
+      </div>
+
+      <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
+        Calcular Costo
+      </button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("formulario").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      fetch("Ejercicio6.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        Swal.fire({
+          icon: data.icon,
+          title: data.message,
+          showConfirmButton: false,
+          timer: 2500,
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo calcular el costo",
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
