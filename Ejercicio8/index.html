@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pago de Agua</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex items-center justify-center h-screen p-4">
+
+  <div class="bg-green-100 p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-green-800 text-center">Pago por Consumo de Agua</h1>
+
+    <form id="aguaForm" class="space-y-4">
+      <div>
+        <label class="block text-green-800 font-medium mb-1">Precio por metro cúbico:</label>
+        <input type="number" name="precio" step="0.01" required class="w-full p-2 border-2 border-green-500 rounded-lg">
+      </div>
+      <div>
+        <label class="block text-green-800 font-medium mb-1">Cantidad de metros consumidos:</label>
+        <input type="number" name="metros" step="0.01" required class="w-full p-2 border-2 border-green-500 rounded-lg">
+      </div>
+      <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
+        Calcular Pago
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("aguaForm");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch("Ejercicio8.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        Swal.fire({
+          icon: data.icon,
+          title: "Resultado",
+          text: data.message,
+          showConfirmButton: false,
+          timer: 3000
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo calcular el pago."
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
