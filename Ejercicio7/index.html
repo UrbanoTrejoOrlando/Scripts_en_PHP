@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evaluación de Alumnos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex items-center justify-center h-screen p-4">
+
+  <div class="bg-green-100 p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-green-800 text-center">Evaluación de Alumnos</h1>
+    
+    <form id="cantidadForm" class="space-y-4">
+      <label class="block text-green-800 font-medium mb-1">Cantidad de alumnos:</label>
+      <input 
+        type="number" 
+        id="cantidad" 
+        min="1"
+        required
+        class="w-full p-2 border-2 border-green-500 rounded-lg"
+      />
+      <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
+        Generar campos
+      </button>
+    </form>
+
+    <form id="calificacionesForm" class="space-y-4 mt-4 hidden">
+      <div id="camposContainer"></div>
+      <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
+        Evaluar
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const cantidadForm = document.getElementById("cantidadForm");
+    const calificacionesForm = document.getElementById("calificacionesForm");
+    const camposContainer = document.getElementById("camposContainer");
+
+    cantidadForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const cantidad = parseInt(document.getElementById("cantidad").value);
+      camposContainer.innerHTML = "";
+
+      for (let i = 1; i <= cantidad; i++) {
+        const input = document.createElement("input");
+        input.type = "number";
+        input.name = "calificaciones[]";
+        input.required = true;
+        input.min = 0;
+        input.max = 100;
+        input.placeholder = `Calificación del alumno ${i}`;
+        input.className = "w-full p-2 border-2 border-green-500 rounded-lg mb-2";
+        camposContainer.appendChild(input);
+      }
+
+      calificacionesForm.classList.remove("hidden");
+    });
+
+    calificacionesForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(calificacionesForm);
+
+      fetch("Ejercicio7.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        Swal.fire({
+          icon: data.icon,
+          title: "Resultado",
+          text: data.message,
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo procesar la información.",
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
