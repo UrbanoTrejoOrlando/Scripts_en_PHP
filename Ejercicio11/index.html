@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Multiplicador</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex items-center justify-center min-h-screen p-4">
+
+  <div class="bg-green-100 p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-green-800 text-center">Multiplicación de Dos Números</h1>
+
+    <form id="multiplicadorForm" class="space-y-4">
+      <div>
+        <label class="block text-green-800 font-medium mb-1">Primer número:</label>
+        <input type="number" name="numero1" required class="w-full p-2 border-2 border-green-500 rounded-lg">
+      </div>
+      <div>
+        <label class="block text-green-800 font-medium mb-1">Segundo número:</label>
+        <input type="number" name="numero2" required class="w-full p-2 border-2 border-green-500 rounded-lg">
+      </div>
+      <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
+        Calcular
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("multiplicadorForm");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch("Ejercicio11.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then(res => res.json())
+      .then(data => {
+        Swal.fire({
+          icon: data.icon,
+          title: "Resultado",
+          text: data.message,
+          showConfirmButton: false,
+          timer: 3000
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo calcular la multiplicación."
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
