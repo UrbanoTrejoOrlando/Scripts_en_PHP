@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Suma de Tres Números</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex items-center justify-center min-h-screen p-4">
+
+  <div class="bg-blue-100 p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-blue-800 text-center">Suma de Tres Números</h1>
+
+    <form id="formSuma" class="space-y-4">
+      <div>
+        <label class="block text-blue-700 text-sm font-medium mb-1">Número 1:</label>
+        <input type="number" name="numero1" class="w-full p-2 border-2 border-blue-400 rounded-lg" required>
+      </div>
+
+      <div>
+        <label class="block text-blue-700 text-sm font-medium mb-1">Número 2:</label>
+        <input type="number" name="numero2" class="w-full p-2 border-2 border-blue-400 rounded-lg" required>
+      </div>
+
+      <div>
+        <label class="block text-blue-700 text-sm font-medium mb-1">Número 3:</label>
+        <input type="number" name="numero3" class="w-full p-2 border-2 border-blue-400 rounded-lg" required>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+        Calcular Suma
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("formSuma");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch("Ejercicio20.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then(res => res.json())
+      .then(data => {
+        Swal.fire({
+          icon: data.icon,
+          title: "Resultado de la Suma",
+          html: `La suma de los tres números es: <br><b>${data.suma}</b>`,
+          confirmButtonText: "Aceptar"
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo realizar la suma."
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
