@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Edad en Meses</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex items-center justify-center min-h-screen p-4">
+
+  <div class="bg-blue-100 p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-blue-800 text-center">Cálculo de Edad en Meses</h1>
+
+    <form id="formEdad" class="space-y-4">
+      <div>
+        <label class="block text-blue-700 text-sm font-medium mb-1">Edad en años:</label>
+        <input type="number" name="edad" class="w-full p-2 border-2 border-blue-400 rounded-lg" required>
+      </div>
+
+      <div>
+        <label class="block text-blue-700 text-sm font-medium mb-1">Meses adicionales:</label>
+        <input type="number" name="meses" class="w-full p-2 border-2 border-blue-400 rounded-lg" required>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+        Calcular Edad en Meses
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("formEdad");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch("Ejercicio21.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then(res => res.json())
+      .then(data => {
+        Swal.fire({
+          icon: data.icon,
+          title: "Resultado de la Edad en Meses",
+          html: `La edad en meses es: <br><b>${data.resultado}</b> meses`,
+          confirmButtonText: "Aceptar"
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo calcular la edad en meses."
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
