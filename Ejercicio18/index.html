@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Sueldo del Empleado</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex items-center justify-center min-h-screen p-4">
+
+  <div class="bg-green-100 p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-green-800 text-center">Calculadora de Sueldo</h1>
+
+    <form id="formSueldo" class="space-y-4">
+      <div>
+        <label class="block text-green-700 text-sm font-medium mb-1">Horas trabajadas:</label>
+        <input type="number" name="horas" min="0" step="0.01" class="w-full p-2 border-2 border-green-400 rounded-lg" required>
+      </div>
+
+      <div>
+        <label class="block text-green-700 text-sm font-medium mb-1">Sueldo por hora:</label>
+        <input type="number" name="sueldo" min="0" step="0.01" class="w-full p-2 border-2 border-green-400 rounded-lg" required>
+      </div>
+
+      <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
+        Calcular Sueldo
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("formSueldo");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch("Ejercicio18.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then(res => res.json())
+      .then(data => {
+        Swal.fire({
+          icon: data.icon,
+          title: "Sueldo Total",
+          html: `<strong>Total:</strong> $${data.sueldo}`,
+          confirmButtonText: "Aceptar"
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo calcular el sueldo."
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
