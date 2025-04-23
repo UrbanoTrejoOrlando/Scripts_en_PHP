@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Comisión de Ventas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex items-center justify-center min-h-screen p-4">
+
+  <div class="bg-blue-100 p-6 rounded-2xl shadow-xl w-full max-w-lg">
+    <h1 class="text-2xl font-bold text-center text-blue-800 mb-4">Cálculo de Comisión</h1>
+
+    <form id="comisionForm" class="space-y-4">
+      <div>
+        <label class="text-blue-700 font-medium">Sueldo fijo:</label>
+        <input type="number" step="0.01" name="sueldo" class="w-full p-2 border-2 border-blue-400 rounded-lg" required>
+      </div>
+
+      <div>
+        <label class="text-blue-700 font-medium">Número de ventas:</label>
+        <input type="number" id="numVentas" class="w-full p-2 border-2 border-blue-400 rounded-lg" required>
+      </div>
+
+      <div id="ventasContainer" class="space-y-2"></div>
+
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+        Calcular Comisión
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const numVentas = document.getElementById("numVentas");
+    const ventasContainer = document.getElementById("ventasContainer");
+
+    numVentas.addEventListener("input", () => {
+      ventasContainer.innerHTML = "";
+      const cantidad = parseInt(numVentas.value);
+
+      for (let i = 1; i <= cantidad; i++) {
+        const label = document.createElement("label");
+        label.className = "text-blue-700 font-medium block mt-2";
+        label.textContent = `Precio de la venta ${i}:`;
+
+        const input = document.createElement("input");
+        input.type = "number";
+        input.step = "0.01";
+        input.name = "ventas[]";
+        input.required = true;
+        input.className = "w-full p-2 border-2 border-blue-400 rounded-lg";
+
+        ventasContainer.appendChild(label);
+        ventasContainer.appendChild(input);
+      }
+    });
+
+    const form = document.getElementById("comisionForm");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch("Ejercicio22.php", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        Swal.fire({
+          icon: data.icon,
+          title: "Resultado",
+          html: `
+            <p>Comisión generada: <b>$${data.comision}</b></p>
+            <p>Sueldo total: <b>$${data.total}</b></p>
+          `,
+          confirmButtonText: "Aceptar"
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al calcular la comisión."
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
