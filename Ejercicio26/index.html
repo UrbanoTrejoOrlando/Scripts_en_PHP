@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Promedio de Edad</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white min-h-screen flex flex-col items-center justify-center p-4">
+
+  <div class="bg-blue-100 p-6 rounded-2xl shadow-xl w-full max-w-lg">
+    <h1 class="text-2xl font-bold text-blue-800 text-center mb-4">Promedio de Edad de Alumnos</h1>
+
+    <form id="formulario" class="space-y-4">
+      <label class="block text-blue-700 font-semibold mb-1">¿Cuántos alumnos hay?</label>
+      <input type="number" id="cantidad" class="w-full p-2 border-2 border-blue-400 rounded-lg" min="1" required>
+
+      <div id="contenedor-edades" class="space-y-2"></div>
+
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full">
+        Calcular Promedio
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const cantidadInput = document.getElementById("cantidad");
+    const contenedor = document.getElementById("contenedor-edades");
+
+    cantidadInput.addEventListener("change", () => {
+      contenedor.innerHTML = "";
+      const cantidad = parseInt(cantidadInput.value);
+      for (let i = 1; i <= cantidad; i++) {
+        contenedor.innerHTML += `
+          <div>
+            <label class="block text-blue-700 font-medium">Edad del alumno ${i}:</label>
+            <input type="number" name="edad[]" class="w-full p-2 border-2 border-blue-300 rounded-lg" required>
+          </div>
+        `;
+      }
+    });
+
+    document.getElementById("formulario").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const edades = Array.from(document.querySelectorAll('input[name="edad[]"]')).map(input => input.value);
+      const formData = new FormData();
+      edades.forEach(edad => formData.append("edades[]", edad));
+
+      fetch("Ejercicio26.php", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          Swal.fire("Error", data.error, "error");
+        } else {
+          Swal.fire(
+            "Resultado",
+            `El promedio de edad de los ${data.cantidad} alumnos es: ${data.promedio} años`,
+            "success"
+          );
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
