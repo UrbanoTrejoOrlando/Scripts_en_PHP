@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mitad de la Tercera Parte</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex items-center justify-center min-h-screen">
+
+  <div class="bg-blue-100 p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold text-blue-800 text-center mb-4">Mitad de la Tercera Parte</h1>
+
+    <form id="numeroForm" class="space-y-4">
+      <div>
+        <label class="block text-blue-700 font-medium mb-1">Ingresa un número:</label>
+        <input type="number" step="any" name="numero" class="w-full p-2 border-2 border-blue-400 rounded-lg" required>
+      </div>
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+        Calcular
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("numeroForm");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch("Ejercicio24.php", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        Swal.fire({
+          icon: "info",
+          title: "Resultado",
+          text: `La mitad de la tercera parte de ${data.original} es: ${data.resultado}`,
+          confirmButtonText: "Aceptar"
+        });
+      })
+      .catch(() => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo realizar el cálculo."
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
