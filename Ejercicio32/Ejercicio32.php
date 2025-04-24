@@ -28,8 +28,6 @@ if (!isset($input['calculo']) || !isset($input['programacion']) || !isset($input
     echo json_encode(["error" => "Datos incompletos"]);
     exit();
 }
-
-// Calificaciones por materia (por ejemplo, 5 unidades por materia)
 $calificaciones['Cálculo Diferencial'] = $input['calculo'];
 $calificaciones['Fundamentos de Programación'] = $input['programacion'];
 $calificaciones['Química'] = $input['quimica'];
