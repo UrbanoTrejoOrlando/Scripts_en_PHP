@@ -9,6 +9,7 @@
 
 $input = json_decode(file_get_contents("php://input"), true);
 
+// Arreglo con las materias a agregar
 $materias = array(
     "Cálculo Diferencial",
     "Fundamentos de Programación",
