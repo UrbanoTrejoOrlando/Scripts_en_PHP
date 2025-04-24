@@ -45,6 +45,7 @@ foreach ($calificaciones as $key => $materia_calificaciones) {
 // Obtnecion del promedio general de todas las materias
 $promedio_general /= count($materias);
 
+// Mositrar el arreglo final
 $response = [
     "promedioGeneral" => number_format($promedio_general, 2),
     "promediosMateria" => $promedios_materias
