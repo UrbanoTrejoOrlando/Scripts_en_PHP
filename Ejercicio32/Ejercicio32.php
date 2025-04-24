@@ -4,7 +4,8 @@
  * Correo: orlandourbanotrejo@gmail.com
  * Algoritmo que registra calificaciones de varias materias y calcula su promedio */
 
-header('Content-Type: application/json');
+// Leer archivo JSON
+ header('Content-Type: application/json');
 
 $input = json_decode(file_get_contents("php://input"), true);
 
