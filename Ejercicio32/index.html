@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de Calificaciones</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-white flex flex-col items-center justify-center min-h-screen p-4">
+  <div class="bg-gray-100 p-6 rounded-2xl shadow-lg w-full max-w-4xl">
+    <h1 class="text-2xl font-bold mb-4 text-center text-blue-700">Registro de Calificaciones</h1>
+    <form id="formulario" class="space-y-6">
+      <div class="space-y-4">
+        <!-- Cálculo Diferencial -->
+        <h2 class="font-semibold text-lg text-blue-500">Cálculo Diferencial</h2>
+        <div class="space-y-2">
+          <label class="block text-gray-700">
+            Unidad 1:
+            <input type="number" step="0.01" name="calculo[]" required class="w-full p-2 rounded border mt-1" />
+          </label>
+          <label class="block text-gray-700">
+            Unidad 2:
+            <input type="number" step="0.01" name="calculo[]" required class="w-full p-2 rounded border mt-1" />
+          </label>
+          <label class="block text-gray-700">
+            Unidad 3:
+            <input type="number" step="0.01" name="calculo[]" required class="w-full p-2 rounded border mt-1" />
+          </label>
+          <label class="block text-gray-700">
+            Unidad 4:
+            <input type="number" step="0.01" name="calculo[]" required class="w-full p-2 rounded border mt-1" />
+          </label>
+          <label class="block text-gray-700">
+            Unidad 5:
+            <input type="number" step="0.01" name="calculo[]" required class="w-full p-2 rounded border mt-1" />
+          </label>
+        </div>
+      </div>
+
+      <!-- Repetir lo mismo para las demás materias -->
+
+      <!-- Fundamentos de Programación -->
+      <div class="space-y-4">
+        <h2 class="font-semibold text-lg text-blue-500">Fundamentos de Programación</h2>
+        <div class="space-y-2">
+          <label class="block text-gray-700">
+            Unidad 1:
+            <input type="number" step="0.01" name="programacion[]" required class="w-full p-2 rounded border mt-1" />
+          </label>
+          <label class="block text-gray-700">
+            Unidad 2:
+            <input type="number" step="0.01" name="programacion[]" required class="w-full p-2 rounded border mt-1" />
+          </label>
+          <label class="block text-gray-700">
+            Unidad 3:
+            <input type="number" step="0.01" name="programacion[]" required class="w-full p-2 rounded border mt-1" />
+          </label>
+          <label class="block text-gray-700">
+            Unidad 4:
+            <input type="number" step="0.01" name="programacion[]" required class="w-full p-2 rounded border mt-1" />
+          </label>
+          <label class="block text-gray-700">
+            Unidad 5:
+            <input type="number" step="0.01" name="programacion[]" required class="w-full p-2 rounded border mt-1" />
+          </label>
+        </div>
+      </div>
+
+      <!-- Agregar las mismas secciones para las demás materias -->
+
+      <div class="flex justify-center mt-4">
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">Registrar Calificaciones</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("formulario").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = {
+        calculo: formData.getAll("calculo[]"),
+        programacion: formData.getAll("programacion[]"),
+        quimica: formData.getAll("quimica[]"),
+        investigacion: formData.getAll("investigacion[]"),
+        discretas: formData.getAll("discretas[]"),
+        sustentable: formData.getAll("sustentable[]")
+      };
+
+      const res = await fetch("Ejercicio33.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+
+      if (result.error) {
+        Swal.fire("Error", result.error, "error");
+      } else {
+        let message = `Promedio General: <strong>${result.promedioGeneral}</strong><br>`;
+
+        for (let materia in result.promediosMateria) {
+          message += `${materia}: <strong>${result.promediosMateria[materia]}</strong><br>`;
+        }
+
+        Swal.fire({
+          title: "¡Calificaciones Registradas!",
+          html: message,
+          icon: "success",
+          confirmButtonColor: "#4CAF50"
+        });
+      }
+    });
+  </script>
+</body>
+</html>
