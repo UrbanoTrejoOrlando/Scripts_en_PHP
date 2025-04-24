@@ -19,6 +19,7 @@ $materias = array(
     "Desarrollo Sustentable"
 );
 
+// Inicializacion de variables
 $calificaciones = array();
 $promedios_materias = array(0, 0, 0, 0, 0, 0);
 $promedio_general = 0;
