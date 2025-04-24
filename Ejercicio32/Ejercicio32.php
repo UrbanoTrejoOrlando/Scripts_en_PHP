@@ -42,7 +42,7 @@ foreach ($calificaciones as $key => $materia_calificaciones) {
     $promedio_general += $promedios_materias[$materia_index];
 }
 
-// Promedio general
+// Obtnecion del promedio general de todas las materias
 $promedio_general /= count($materias);
 
 $response = [
