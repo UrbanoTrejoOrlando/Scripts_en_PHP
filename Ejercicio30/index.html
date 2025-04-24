@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Multiplicación de Arreglos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded shadow-lg w-full max-w-md">
+    <h2 class="text-2xl font-bold text-center mb-6">Multiplica dos arreglos</h2>
+    <form id="form" class="space-y-4">
+      <div>
+        <label class="block mb-2 font-semibold">Arreglo 1 (5 números separados por coma):</label>
+        <input type="text" id="arreglo1" class="w-full border rounded p-2" placeholder="Ej. 1,2,3,4,5" required>
+      </div>
+      <div>
+        <label class="block mb-2 font-semibold">Arreglo 2 (5 números separados por coma):</label>
+        <input type="text" id="arreglo2" class="w-full border rounded p-2" placeholder="Ej. 5,4,3,2,1" required>
+      </div>
+      <button type="submit" class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">Calcular</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const primero = document.getElementById('arreglo1').value.split(',').map(Number);
+      const segundo = document.getElementById('arreglo2').value.split(',').map(Number);
+
+      try {
+        const response = await fetch('Ejercicio30.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ primero, segundo })
+        });
+
+        const result = await response.json();
+        if (result.resultado) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Resultado',
+            text: 'El arreglo resultante es: ' + result.resultado.join(', ')
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: result.error
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error en la solicitud',
+          text: 'Verifica que el servidor esté corriendo correctamente.'
+        });
+      }
+    });
+  </script>
+</body>
+</html>
