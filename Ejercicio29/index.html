@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Promedio de Alumno</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-blue-50 min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+    <h1 class="text-2xl font-bold text-center text-blue-600 mb-6">Promedio de Calificaciones</h1>
+    
+    <form id="form" class="space-y-4">
+      <div>
+        <label class="block text-gray-700 font-semibold mb-1">Nombre de la materia:</label>
+        <input type="text" name="materia" required class="w-full p-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <input type="number" name="calificaciones[]" placeholder="Unidad 1" required class="p-2 border rounded-xl">
+        <input type="number" name="calificaciones[]" placeholder="Unidad 2" required class="p-2 border rounded-xl">
+        <input type="number" name="calificaciones[]" placeholder="Unidad 3" required class="p-2 border rounded-xl">
+        <input type="number" name="calificaciones[]" placeholder="Unidad 4" required class="p-2 border rounded-xl">
+        <input type="number" name="calificaciones[]" placeholder="Unidad 5" required class="p-2 border rounded-xl">
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl transition">
+        Calcular promedio
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("form");
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      const response = await fetch("Ejercicio29.php", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.error,
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "¡Promedio Calculado!",
+          html: `
+            <p><strong>Materia:</strong> ${data.materia}</p>
+            <p><strong>Calificaciones:</strong> ${data.calificaciones.join(", ")}</p>
+            <p><strong>Promedio:</strong> ${data.promedio}</p>
+          `
+        });
+      }
+    });
+  </script>
+</body>
+</html>
