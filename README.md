@@ -99,5 +99,3 @@ Orlando Urbano Trejo
 
 
 ---
-
-¿Te gustaría que también te ayude a mejorar el diseño de los formularios HTML o los script
